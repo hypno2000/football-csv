@@ -15,10 +15,18 @@ defmodule DerivcoFootball.LeagueDataServer do
   end
 
   def handle_call(:get_league_season_pairs, _from, state) do
-    {:reply, state, state}
+    {:reply, {:ok, state}, state}
+  end
+
+  def handle_call({:get_league_season_results, league_season_pair}, _from, state) do
+    if MapSet.member?(state, league_season_pair) do
+      {:reply, {:ok, :ets.tab2list(String.to_existing_atom(league_season_pair))}, state}
+    else
+      {:reply, {:error, :bad_league_season_pair}, state}
+    end
   end
   
-  defp process_lines([], ets_table_names), do: {:ok, ets_table_names}
+  defp process_lines([], ets_table_names), do: ets_table_names
   
   defp process_lines([""|rest_of_lines], ets_table_names) do
     process_lines(rest_of_lines, ets_table_names)

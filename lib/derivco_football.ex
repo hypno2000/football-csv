@@ -11,8 +11,8 @@ defmodule DerivcoFootball do
     # IO.inspect :ets.all()
     # IO.inspect :ets.tab2list(String.to_existing_atom("E0_201617"))
 
-    GenServer.call(DerivcoFootball.LeagueDataServer, :get_league_season_pairs)
-
+    #GenServer.call(DerivcoFootball.LeagueDataServer, :get_league_season_pairs)
+    #GenServer.call(DerivcoFootball.LeagueDataServer, {:get_league_season_results, "E0_201617"})
     result
   end
 end
