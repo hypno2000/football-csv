@@ -46,8 +46,19 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
     send_resp(conn, 200, "/api/json/league_season_results/#{league_season_pair} here")
   end
 
+  
   defp handle_protobuf_get_league_season_pairs(conn) do
-    send_resp(conn, 200, "/api/protobuf/league_season_pairs here")
+    with {:ok, league_season_pairs} <- GenServer.call(DerivcoFootball.LeagueDataServer,
+                                                      :get_league_season_pairs)
+      do
+      league_season_pairs
+      |> MapSet.to_list()
+      |> (&ProtobufMessages.LeagueSeasonPairs.new(values: &1)).()
+      |> ProtobufMessages.LeagueSeasonPairs.encode()
+      |> (&send_resp(conn, 200, &1)).()
+      else
+        {:error, description} -> IO.puts "oh noes! #{description}"
+    end
   end
 
   defp handle_protobuf_get_league_season_results(conn, league_season_pair) do
@@ -57,4 +68,17 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
   defp handle_404(conn) do
     send_resp(conn, 404, "they like...aren't here or something")
   end
+end
+
+
+defmodule ProtobufMessages do
+    use Protobuf, """
+    message LeagueSeasonPairs{
+      repeated string values = 2;
+    }
+    
+    message LeagueSeasonPairResults{
+      required uint32 oop = 1;
+    }
+  """
 end
