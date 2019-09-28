@@ -7,7 +7,12 @@ defmodule DerivcoFootball.Application do
 
   def start(_type, _args) do
     children = [
-      LeagueDataServer
+      LeagueDataServer,
+      Plug.Cowboy.child_spec(
+        scheme: :http,
+        plug: DerivcoFootball.LeagueDataEndpoint,
+        options: [port: 4000]
+      )
     ]
 
     opts = [strategy: :one_for_one, name: DerivcoFootball.Supervisor]
