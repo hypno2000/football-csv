@@ -3,16 +3,16 @@ defmodule DerivcoFootball do
   Documentation for DerivcoFootball.
   """
 
-  @doc """
-  Hello world.
+  import DerivcoFootball.LeagueDataServer
 
-  ## Examples
+  def start(type, args) do    
 
-      iex> DerivcoFootball.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    load_league_data()
+    
+    # IO.inspect :ets.all()
+    # IO.inspect :ets.tab2list(String.to_existing_atom("E0_201617"))
+    # IO.inspect :ets.tab2list(:ets_league_data_table_names)
+    
+    #    DerivcoFootball.Application.start(type, args)
   end
 end
