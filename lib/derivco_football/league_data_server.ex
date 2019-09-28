@@ -1,10 +1,16 @@
-defmodule DerivcoFootball.LeagueDataLoader do
+defmodule DerivcoFootball.LeagueDataServer do
   @moduledoc """
   """
 
+  use GenServer
+
   import DerivcoFootball.LeagueData
   
-  def load_league_data() do
+  def start_link(_args) do
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def init(_args) do
     :ets.new(:ets_league_data_table_names, [:named_table])
     {:ok, process_lines(Regex.split(~r/\n/, csvData()))}
   end
