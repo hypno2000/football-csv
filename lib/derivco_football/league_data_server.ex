@@ -14,6 +14,10 @@ defmodule DerivcoFootball.LeagueDataServer do
     {:ok, process_lines(Regex.split(~r/\n/, csvData()), MapSet.new())}
   end
 
+  def handle_call(:get_league_season_pairs, _from, state) do
+    {:reply, state, state}
+  end
+  
   defp process_lines([], ets_table_names), do: {:ok, ets_table_names}
   
   defp process_lines([""|rest_of_lines], ets_table_names) do
