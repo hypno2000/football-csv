@@ -16,10 +16,9 @@ defmodule DerivcoFootball.LeagueDataServer do
   end
 
   defp process_lines([]), do: {:ok, :data_processed}
+  defp process_lines([""|rest_of_lines]), do: process_lines(rest_of_lines)
   defp process_lines([current_line|rest_of_lines]) do
-    unless current_line == "" do
-        insert_data(String.split(current_line, ","))
-    end
+    insert_data(String.split(current_line, ","))
     process_lines(rest_of_lines)
   end
 
