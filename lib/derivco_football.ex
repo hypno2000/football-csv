@@ -3,7 +3,7 @@ defmodule DerivcoFootball do
   Documentation for DerivcoFootball.
   """
 
-  import DerivcoFootball.LeagueDataServer
+  import DerivcoFootball.LeagueDataLoader
 
   def start(type, args) do    
 
