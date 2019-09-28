@@ -28,10 +28,14 @@ defmodule DerivcoFootball.LeagueDataServer do
 
   defp insert_data([div, season, date, home_team, away_team, fthg, ftag, ftr, hthg, htag, htr]) do
     ets_table_name = "#{div}_#{season}"
-    # DOCUMENT
-    # DOCUMENT
-    try do
-      
+    # This is a bit weird and non-elixirish...using the try/rescue
+    # somewhat like control flow. The reason is that most of the
+    # inserts will succeed and by rescuing on the argument error
+    # for the small number of times it'll happen is faster and
+    # cleaner than checking what ets tables exist every time
+    # before the insert. It's also faster and cleaner than adding
+    # another argument to keep track of them.
+    try do      
       # converting string to atoms can be dangerous since the BEAM
       # has a fixed number of atoms available. however, this isn't
       # from external input nor a continuous process; the data comes
