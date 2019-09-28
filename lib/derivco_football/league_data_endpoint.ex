@@ -1,3 +1,27 @@
+defmodule ProtobufMessages do
+    use Protobuf, """
+    message LeagueSeasonPairs{
+      repeated string values = 1;
+    }
+    
+    message LeagueSeasonPairResult{
+      required string date = 1;
+      required string home_team = 2;
+      required string away_team = 3;
+      required uint32 fthg = 4;
+      required uint32 ftag = 5;
+      required string ftr = 6;
+      required uint32 hthg = 7;
+      required uint32 htag = 8;
+      required string htr = 9;
+    }
+
+    message LeagueSeasonPairResults{
+      repeated LeagueSeasonPairResult leagueSeasonPairResult = 1;
+    }
+  """
+end
+
 defmodule DerivcoFootball.LeagueDataEndpoint do
   @moduledoc """
   """
@@ -45,8 +69,7 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
   defp handle_json_get_league_season_results(conn, league_season_pair) do
     send_resp(conn, 200, "/api/json/league_season_results/#{league_season_pair} here")
   end
-
-  
+ 
   defp handle_protobuf_get_league_season_pairs(conn) do
     with {:ok, league_season_pairs} <- GenServer.call(DerivcoFootball.LeagueDataServer,
                                                       :get_league_season_pairs)
@@ -60,25 +83,43 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
         {:error, description} -> IO.puts "oh noes! #{description}"
     end
   end
-
+  
   defp handle_protobuf_get_league_season_results(conn, league_season_pair) do
-    send_resp(conn, 200, "/api/protobuf/league_season_results/#{league_season_pair} here")
+    with {:ok, league_season_results} <- GenServer.call(DerivcoFootball.LeagueDataServer,
+                                                        {:get_league_season_results,
+                                                         league_season_pair})
+      do
+      league_season_results
+      |> Enum.map(fn league_season_result -> reformat_league_season_result league_season_result end)
+      |> (&ProtobufMessages.LeagueSeasonPairResults.new(leagueSeasonPairResult: &1)).()
+      |> ProtobufMessages.LeagueSeasonPairResults.encode()
+      |> (&send_resp(conn, 200, &1)).()
+      
+      else
+        {:error, description} -> IO.puts "oh noes! #{description}"
+    end
   end
 
   defp handle_404(conn) do
     send_resp(conn, 404, "they like...aren't here or something")
   end
-end
 
-
-defmodule ProtobufMessages do
-    use Protobuf, """
-    message LeagueSeasonPairs{
-      repeated string values = 2;
-    }
-    
-    message LeagueSeasonPairResults{
-      required uint32 oop = 1;
-    }
-  """
+  defp reformat_league_season_result({{date, home_team, away_team},
+                                      fthg,
+                                      ftag,
+                                      ftr,
+                                      hthg,
+                                      htag,
+                                      htr}) do
+    %ProtobufMessages.LeagueSeasonPairResult{
+      date:      date,
+      home_team: home_team,
+      away_team: away_team,
+      fthg:      fthg,
+      ftag:      ftag,
+      ftr:       ftr,
+      hthg:      hthg,
+      htag:      htag,
+      htr:       htr}
+  end
 end
