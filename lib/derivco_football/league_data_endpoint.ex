@@ -51,10 +51,10 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
         do
           send_resp(conn, 200, league_season_json_pairs)
         else
-          {:error, description} -> IO.puts "oh noes! #{description}"
+          {:error, _description} -> send_resp(conn, 500, "Sever error.")
         end
       else
-        {:error, description} -> IO.puts "oh noes! #{description}"
+        {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
     end
   end
 
@@ -74,10 +74,10 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
         do
           send_resp(conn, 200, league_season_json_results)
         else
-          {:error, description} -> IO.puts "oh noes! #{description}"
+          {:error, _description} -> send_resp(conn, 500, "Sever error.")
       end
       else
-        {:error, description} -> IO.puts "oh noes! #{description}"
+        {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
     end
   end
  
@@ -91,28 +91,28 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
       |> ProtobufMessages.LeagueSeasonPairs.encode()
       |> (&send_resp(conn, 200, &1)).()
       else
-        {:error, description} -> IO.puts "oh noes! #{description}"
+        {:error, _description} -> send_resp(conn, 500, "Sever error.")
     end
   end
   
   defp handle_protobuf_get_league_season_results(conn, league_season_pair) do
-    with {:ok, league_season_results} <- GenServer.call(DerivcoFootball.LeagueDataServer,
-                                                        {:get_league_season_results,
-                                                         league_season_pair})
-      do
-      league_season_results
-      |> Enum.map(fn league_season_result -> reformat_league_season_result league_season_result end)
-      |> (&ProtobufMessages.LeagueSeasonPairResults.new(leagueSeasonPairResult: &1)).()
-      |> ProtobufMessages.LeagueSeasonPairResults.encode()
-      |> (&send_resp(conn, 200, &1)).()
-      
-      else
-        {:error, description} -> IO.puts "oh noes! #{description}"
+    case GenServer.call(DerivcoFootball.LeagueDataServer,
+                        {:get_league_season_results,
+                        league_season_pair}) do
+      {:ok, league_season_results} ->
+        league_season_results
+        |> Enum.map(fn league_season_result -> reformat_league_season_result league_season_result end)
+        |> (&ProtobufMessages.LeagueSeasonPairResults.new(leagueSeasonPairResult: &1)).()
+        |> ProtobufMessages.LeagueSeasonPairResults.encode()
+        |> (&send_resp(conn, 200, &1)).()
+      {:error, :bad_league_season_pair} ->
+        send_resp(conn, 400, "Bad league/season pair.")
+      {:error, _description} -> send_resp(conn, 500, "Sever error.")
     end
   end
 
   defp handle_404(conn) do
-    send_resp(conn, 404, "they like...aren't here or something")
+    send_resp(conn, 404, "Sorry, nobody by that name lives here.")
   end
 
   defp reformat_league_season_result({{date, home_team, away_team},
