@@ -41,57 +41,55 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
   alias DerivcoFootball.ProtobufMessages
   
   defp handle_get_json_league_season_pairs(conn) do
-     with {:ok, league_season_pairs} <- GenServer.call(DerivcoFootball.LeagueDataServer,
-                                                      :get_league_season_pairs)
-      do
+    case GenServer.call(DerivcoFootball.LeagueDataServer,
+                        :get_league_season_pairs) do
+      {:ok, league_season_pairs} ->
         league_season_pairs
         |> MapSet.to_list()
-        with {:ok, league_season_json_pairs} <- league_season_pairs
         |> Poison.encode()
-        do
-          send_resp(conn, 200, league_season_json_pairs)
-        else
-          {:error, _description} -> send_resp(conn, 500, "Sever error.")
-        end
-      else
-        {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
+        |> case do
+            {:ok, league_season_json_pairs} ->
+              send_resp(conn, 200, league_season_json_pairs)            
+            {_, _} -> send_resp(conn, 500, "Sever error.")
+           end
+      {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
+      {_, _} -> send_resp(conn, 500, "Sever error.")
     end
   end
 
   defp handle_json_get_league_season_results(conn, league_season_pair) do
-    with {:ok, league_season_results} <- GenServer.call(DerivcoFootball.LeagueDataServer,
-                                                        {:get_league_season_results,
-                                                         league_season_pair})
-      do
-        with {:ok, league_season_json_results} <- league_season_results
-        # ***NB***
-        # Calling 'reformat_league_season_result', even though it returns protobuf structs,
-        # ISN'T a mistake. It's a happy accident. The exprotobuf gives us elixir structs as 
-        # part of processing the protobuf schema. These structs are in the same form that we 
-        # need for JSON (since all the data is the same), so we can reuse them here.
-        |> Enum.map(fn league_season_result -> reformat_league_season_result league_season_result end)
-        |> Poison.encode()
-        do
-          send_resp(conn, 200, league_season_json_results)
-        else
-          {:error, _description} -> send_resp(conn, 500, "Sever error.")
-      end
-      else
-        {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
+    case GenServer.call(DerivcoFootball.LeagueDataServer,
+                        {:get_league_season_results,
+                         league_season_pair}) do
+      {:ok, league_season_results} ->          
+            # ***NB***
+            # Calling 'reformat_league_season_result', even though it returns protobuf structs,
+            # ISN'T a mistake. It's a happy accident. The exprotobuf gives us elixir structs as 
+            # part of processing the protobuf schema. These structs are in the same form that we 
+            # need for JSON (since all the data is the same), so we can reuse them here.
+            league_season_results
+            |> Enum.map(fn league_season_result -> reformat_league_season_result league_season_result end)
+            |> Poison.encode()
+            |> case do
+                 {:ok, league_season_json_results} -> 
+                   send_resp(conn, 200, league_season_json_results)
+                 {_, _} -> send_resp(conn, 500, "Sever error.")
+               end
+      {:error, :bad_league_season_pair} -> send_resp(conn, 400, "Bad league/season pair.")
+      {_, _} -> send_resp(conn, 500, "Sever error.")
     end
   end
  
   defp handle_protobuf_get_league_season_pairs(conn) do
-    with {:ok, league_season_pairs} <- GenServer.call(DerivcoFootball.LeagueDataServer,
-                                                      :get_league_season_pairs)
-      do
-      league_season_pairs
-      |> MapSet.to_list()
-      |> (&ProtobufMessages.LeagueSeasonPairs.new(values: &1)).()
-      |> ProtobufMessages.LeagueSeasonPairs.encode()
-      |> (&send_resp(conn, 200, &1)).()
-      else
-        {:error, _description} -> send_resp(conn, 500, "Sever error.")
+    case GenServer.call(DerivcoFootball.LeagueDataServer,
+                        :get_league_season_pairs) do
+      {:ok, league_season_pairs} ->
+        league_season_pairs
+        |> MapSet.to_list()
+        |> (&ProtobufMessages.LeagueSeasonPairs.new(values: &1)).()
+        |> ProtobufMessages.LeagueSeasonPairs.encode()
+        |> (&send_resp(conn, 200, &1)).()
+      {_, _} -> send_resp(conn, 500, "Sever error.")
     end
   end
   

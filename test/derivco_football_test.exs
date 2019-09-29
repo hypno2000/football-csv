@@ -17,7 +17,6 @@ defmodule DerivcoFootballTest do
     HTTPoison.start()
   end
 
-
   # Test Data
   #
   # """
