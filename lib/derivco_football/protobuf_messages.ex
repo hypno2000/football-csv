@@ -1,5 +1,5 @@
 defmodule DerivcoFootball.ProtobufMessages do
-    use Protobuf, """
+  use Protobuf, """
     message LeagueSeasonPairs{
       repeated string values = 1;
     }

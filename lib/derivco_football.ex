@@ -3,7 +3,7 @@ defmodule DerivcoFootball do
   Documentation for DerivcoFootball.
   """
 
-  def start(type, args) do    
+  def start(type, args) do
     DerivcoFootball.Application.start(type, args)
   end
 end

@@ -1,5 +1,4 @@
 defmodule DerivcoFootballTest do
-
   @moduledoc """
   As the data is coming in from external systems,
   we're going to make the assumption that the data
@@ -9,7 +8,7 @@ defmodule DerivcoFootballTest do
   boundaries. This makes error handling and testing
   much more complicated and breaks encapsulation.
   """
-  
+
   use ExUnit.Case
   doctest DerivcoFootball
 
@@ -32,13 +31,15 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/json/league_season_pairs") do
       {:ok, %HTTPoison.Response{body: body, status_code: 200}} ->
         assert body ==
-        "[\"D1_201617\",\"E0_201617\",\"SP1_201516\",\"SP1_201617\",\"SP2_201516\",\"SP2_201617\"]"
+                 "[\"D1_201617\",\"E0_201617\",\"SP1_201516\",\"SP1_201617\",\"SP2_201516\",\"SP2_201617\"]"
+
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code != 200 ->
-        assert :false
+        assert false
+
       {:error, reason} ->
-        IO.inspect reason
-        assert :false
+        IO.inspect(reason)
+        assert false
     end
   end
 
@@ -46,13 +47,15 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/protobuf/league_season_pairs") do
       {:ok, %HTTPoison.Response{body: body, status_code: 200}} ->
         assert body ==
-        "\n\tD1_201617\n\tE0_201617\n\nSP1_201516\n\nSP1_201617\n\nSP2_201516\n\nSP2_201617"
+                 "\n\tD1_201617\n\tE0_201617\n\nSP1_201516\n\nSP1_201617\n\nSP2_201516\n\nSP2_201617"
+
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code != 200 ->
-        assert :false
+        assert false
+
       {:error, reason} ->
-        IO.inspect reason
-        assert :false
+        IO.inspect(reason)
+        assert false
     end
   end
 
@@ -60,13 +63,15 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/json/league_season_results/E0_201617") do
       {:ok, %HTTPoison.Response{body: body, status_code: 200}} ->
         assert body ==
-        "[{\"htr\":\"D\",\"hthg\":0,\"htag\":0,\"home_team\":\"West Ham\",\"ftr\":\"H\",\"fthg\":1,\"ftag\":0,\"date\":\"21/08/2016\",\"away_team\":\"Bournemouth\"}]"
+                 "[{\"htr\":\"D\",\"hthg\":0,\"htag\":0,\"home_team\":\"West Ham\",\"ftr\":\"H\",\"fthg\":1,\"ftag\":0,\"date\":\"21/08/2016\",\"away_team\":\"Bournemouth\"}]"
+
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code != 200 ->
-        assert :false
+        assert false
+
       {:error, reason} ->
-        IO.inspect reason
-        assert :false
+        IO.inspect(reason)
+        assert false
     end
   end
 
@@ -74,9 +79,10 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/json/league_season_results/INVALID") do
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code == 400 ->
-        assert :true
+        assert true
+
       {_, _} ->
-        assert :false
+        assert false
     end
   end
 
@@ -84,13 +90,17 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/protobuf/league_season_results/E0_201617") do
       {:ok, %HTTPoison.Response{body: body, status_code: 200}} ->
         assert body ==
-        <<10, 49, 10, 10, 50, 49, 47, 48, 56, 47, 50, 48, 49, 54, 18, 8, 87, 101, 115, 116, 32, 72, 97, 109, 26, 11, 66, 111, 117, 114, 110, 101, 109, 111, 117, 116, 104, 32, 1, 40, 0, 50, 1, 72, 56, 0, 64, 0, 74, 1, 68>>
+                 <<10, 49, 10, 10, 50, 49, 47, 48, 56, 47, 50, 48, 49, 54, 18, 8, 87, 101, 115,
+                   116, 32, 72, 97, 109, 26, 11, 66, 111, 117, 114, 110, 101, 109, 111, 117, 116,
+                   104, 32, 1, 40, 0, 50, 1, 72, 56, 0, 64, 0, 74, 1, 68>>
+
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code != 200 ->
-        assert :false
+        assert false
+
       {:error, reason} ->
-        IO.inspect reason
-        assert :false
+        IO.inspect(reason)
+        assert false
     end
   end
 
@@ -98,9 +108,10 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/api/protobuf/league_season_results/INVALID") do
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code == 400 ->
-        assert :true
-      {_, _} -> 
-        assert :false
+        assert true
+
+      {_, _} ->
+        assert false
     end
   end
 
@@ -108,9 +119,10 @@ defmodule DerivcoFootballTest do
     case HTTPoison.get("http://localhost:4000/INVALID") do
       {:ok, %HTTPoison.Response{status_code: status_code}}
       when status_code == 404 ->
-        assert :true
-      {_, _} -> 
-        assert :false
+        assert true
+
+      {_, _} ->
+        assert false
     end
-  end  
+  end
 end
