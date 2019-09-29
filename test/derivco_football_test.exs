@@ -16,7 +16,7 @@ defmodule DerivcoFootballTest do
     HTTPoison.start()
   end
 
-  # Test Data
+  # For reference, the data subset for testing.
   #
   # """
   # SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H

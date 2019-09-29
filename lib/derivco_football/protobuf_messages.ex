@@ -1,4 +1,9 @@
 defmodule DerivcoFootball.ProtobufMessages do
+  @moduledoc"""
+  A Protocol Buffer schema based on the
+  ExProtobuf documentation.
+  """
+  
   use Protobuf, """
     message LeagueSeasonPairs{
       repeated string values = 1;

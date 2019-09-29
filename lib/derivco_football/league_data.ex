@@ -1,9 +1,25 @@
 defmodule DerivcoFootball.LeagueData do
+  @moduledoc"""
+  The data, and a subset for test, in csv format.
+
+  As the data is coming in from external systems,
+  we're going to make the assumption that the data
+  has been validated before it's been made avalible.
+  If this weren't the case, we'd have to deal with
+  data validation bleeding across all system/service
+  boundaries. This makes error handling and testing
+  much more complicated and breaks encapsulation.
+  """
+
+  @doc"""
+  A simple function to return the data with a special
+  case for testing because Mock isn't able to change
+  csvData outside of the actual test code. So we'll
+  conditionally change the data based on if we're in
+  the test environment. The test data set include all
+  the unique league season pairs in the full data set.
+  """
   def csvData() do
-    # Mock isn't able to change csvData outside of the actual test
-    # code, so we'll conditionally change the data based on if we're
-    # in the test environment. The test data set include all the
-    # unique league season pairs in the full data set.
     if Mix.env() == :test do
       """
       SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H

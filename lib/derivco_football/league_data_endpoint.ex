@@ -1,5 +1,41 @@
 defmodule DerivcoFootball.LeagueDataEndpoint do
   @moduledoc """
+  This module contains both the routing and handling for the
+  HTTP API. As this is a small API and rather simple to implement,
+  we're not using anything but Cowboy and Plug as the general
+  "framework" along with ExProtobuf and Poison for handling the
+  response endoding.
+
+  The handlers call into another GenServer:
+  DerivcoFootball.LeagueDataServer
+
+  This server returns the data in tuple form that is then processed
+  here into either JSON or Protocol Buffers.
+
+  On thing to keep in mind, since it looks a little strange at
+  first is that the 'reformat_league_season_result' function, that
+  returns Protocol buffer structs, is used for processing both
+  Protocol buffer *AND* JSON requests. This is due to the fact that
+  these structs are generated automatically by ExProtobuf and have
+  essentially the same structure as any custom structures we'd
+  create manually.
+
+  The only HTTP response codes are: 200, 400, 404, and 500. 400
+  is returned for sending a bad league/season pair when requesting
+  league/season results and 500 is returned for any unforseen errors;
+  effectively a catch-all.
+
+  There isn't a lot of defensive handling here for two reasons:
+
+  1) the usual Elixir/Erlang/OTP practice of letting things crash,
+  restart, and get figured out if there's an actual underlying
+  problem
+
+  2) by the time requests are here the data should already have
+  been processed, stored, and in a good state.
+
+  The individual API calls are documented in there handler's
+  @doc strings.
   """
 
   use Plug.Router
@@ -40,6 +76,14 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
 
   alias DerivcoFootball.ProtobufMessages
 
+  # This function returns all of the unique league/season
+  # pairs available in the dataset. These are effectively
+  # keys for retrieving the results for the that league
+  # and season. This would typically be called at least
+  # once, to get the available pairs before retriving
+  # the results.
+  #
+  # This handler returns the pairs in JSON
   defp handle_get_json_league_season_pairs(conn) do
     case GenServer.call(
            DerivcoFootball.LeagueDataServer,
@@ -65,6 +109,10 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
     end
   end
 
+  # This is the primary informational function as it returns
+  # the actual results for a league/season pair.
+  #
+  # This handler returns the results in JSON format.
   defp handle_json_get_league_season_results(conn, league_season_pair) do
     case GenServer.call(
            DerivcoFootball.LeagueDataServer,
@@ -97,6 +145,14 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
     end
   end
 
+  # This function returns all of the unique league/season
+  # pairs available in the dataset. These are effectively
+  # keys for retrieving the results for the that league
+  # and season. This would typically be called at least
+  # once, to get the available pairs before retriving
+  # the results.
+  #
+  # This handler returns the pairs in a Protocol Buffer
   defp handle_protobuf_get_league_season_pairs(conn) do
     case GenServer.call(
            DerivcoFootball.LeagueDataServer,
@@ -114,6 +170,10 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
     end
   end
 
+  # This is the primary informational function as it returns
+  # the actual results for a league/season pair.
+  #
+  # This handler returns the results in a Protocol Buffer.
   defp handle_protobuf_get_league_season_results(conn, league_season_pair) do
     case GenServer.call(
            DerivcoFootball.LeagueDataServer,
@@ -136,10 +196,18 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
     end
   end
 
+  # Just a simple 404 handler.
   defp handle_404(conn) do
     send_resp(conn, 404, "Sorry, nobody by that name lives here.")
   end
 
+  # This function is used for destructuring the league/season results.
+  # It's a separate function so we can use pattern matching when we
+  # map over the list of results.
+  #
+  # NB: As repeated elsewhere, even though this function returns
+  # ExProtobuf structures, we use them for JSON as well since they
+  # provide the same data and are automatically generated for us.
   defp reformat_league_season_result(
          {{date, home_team, away_team}, fthg, ftag, ftr, hthg, htag, htr}
        ) do
