@@ -25,7 +25,8 @@ defmodule DerivcoFootball.MixProject do
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},
       {:exprotobuf, "~> 1.2"},
-      {:httpoison, "~> 1.5"}
+      {:httpoison, "~> 1.5"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
     ]
   end
 end
