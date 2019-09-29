@@ -24,7 +24,8 @@ defmodule DerivcoFootball.MixProject do
     [
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},
-      {:exprotobuf, "~> 1.2"}
+      {:exprotobuf, "~> 1.2"},
+      {:mock, "~> 0.3"}
     ]
   end
 end
