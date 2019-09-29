@@ -4,4 +4,4 @@ ENV APP_HOME /derivco_football
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
-
+RUN mix local.hex --force  
