@@ -15,7 +15,6 @@ defmodule DerivcoFootball.MixProject do
   def application do
     [
       extra_applications: [:logger],
-#      mod: {DerivcoFootball.Application, []}
       mod: {DerivcoFootball, []}
     ]
   end
