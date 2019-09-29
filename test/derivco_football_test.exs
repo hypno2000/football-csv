@@ -16,15 +16,18 @@ defmodule DerivcoFootballTest do
   setup do
     HTTPoison.start()
   end
-  
-# """
-# SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H
-# SP1,201516,30/04/2016,Ath Madrid,Vallecano,1,0,H,0,0,D
-# SP2,201617,11/06/2017,Numancia,Mirandes,0,2,A,0,0,D
-# SP2,201516,22/08/2015,Alcorcon,Mallorca,2,0,H,1,0,H
-# E0,201617,21/08/2016,West Ham,Bournemouth,1,0,H,0,0,D
-# D1,201617,13/05/2017,Freiburg,Ingolstadt,1,1,D,1,1,D
-# """
+
+
+  # Test Data
+  #
+  # """
+  # SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H
+  # SP1,201516,30/04/2016,Ath Madrid,Vallecano,1,0,H,0,0,D
+  # SP2,201617,11/06/2017,Numancia,Mirandes,0,2,A,0,0,D
+  # SP2,201516,22/08/2015,Alcorcon,Mallorca,2,0,H,1,0,H
+  # E0,201617,21/08/2016,West Ham,Bournemouth,1,0,H,0,0,D
+  # D1,201617,13/05/2017,Freiburg,Ingolstadt,1,1,D,1,1,D
+  # """
 
   test "/api/json/league_season_pairs endpoint" do
     case HTTPoison.get("http://localhost:4000/api/json/league_season_pairs") do
@@ -94,16 +97,21 @@ defmodule DerivcoFootballTest do
 
   test "/api/protobuf/league_season_results/:league_season_pairs endpoint with invalid parameter" do
     case HTTPoison.get("http://localhost:4000/api/protobuf/league_season_results/INVALID") do
-      {:ok, %HTTPoison.Response{status_code: status_code}} -> 
-      if status_code == 400 do
+      {:ok, %HTTPoison.Response{status_code: status_code}}
+      when status_code == 400 ->
         assert :true
-      else
+      {_, _} -> 
         assert :false
-      end
     end
   end
 
   test "invalid endpoint" do
-    :true
+    case HTTPoison.get("http://localhost:4000/INVALID") do
+      {:ok, %HTTPoison.Response{status_code: status_code}}
+      when status_code == 404 ->
+        assert :true
+      {_, _} -> 
+        assert :false
+    end
   end  
 end
