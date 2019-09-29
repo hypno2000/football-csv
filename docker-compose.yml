@@ -3,18 +3,24 @@ services:
   dfd1:
     image: derivco_football
     build: .
+    environment:
+      - MIX_ENV=prod
     volumes:
       - ./:/derivco_football
     command: /bin/bash -c  'mix run --no-halt'
   dfd2:
     image: derivco_football
     build: .
+    environment:
+      - MIX_ENV=prod
     volumes:
       - ./:/derivco_football
     command: /bin/bash -c  'mix run --no-halt'
   dfd3:
     image: derivco_football
     build: .
+    environment:
+      - MIX_ENV=prod
     volumes:
       - ./:/derivco_football
     command: /bin/bash -c  'mix run --no-halt'
