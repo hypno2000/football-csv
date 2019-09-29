@@ -1,0 +1,29 @@
+version: '3'
+services:
+  dfd1:
+    image: derivco_football
+    build: .
+    ports:
+    volumes:
+      - ./:/derivco_football
+    command: /bin/bash -c  'mix run --no-halt'
+  dfd2:
+    image: derivco_football
+    build: .
+    volumes:
+      - ./:/derivco_football
+    command: /bin/bash -c  'mix run --no-halt'
+  dfd3:
+    image: derivco_football
+    build: .
+    volumes:
+      - ./:/derivco_football
+    command: /bin/bash -c  'mix run --no-halt'
+  haproxy:
+    build: ./haproxy
+    ports:
+      - 4000:4000
+      depends_on:
+        - dfd1
+        - dfd2
+        - dfd3
