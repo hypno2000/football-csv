@@ -1,6 +1,20 @@
 defmodule DerivcoFootball.LeagueData do
   def csvData() do
-  """
+    # Mock isn't able to change csvData outside of the actual test
+    # code, so we'll conditionally change the data based on if we're
+    # in the test environment. The test data set include all the
+    # unique league season pairs in the full data set.
+    if Mix.env() == :test do
+"""
+SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H
+SP1,201516,30/04/2016,Ath Madrid,Vallecano,1,0,H,0,0,D
+SP2,201617,11/06/2017,Numancia,Mirandes,0,2,A,0,0,D
+SP2,201516,22/08/2015,Alcorcon,Mallorca,2,0,H,1,0,H
+E0,201617,21/08/2016,West Ham,Bournemouth,1,0,H,0,0,D
+D1,201617,13/05/2017,Freiburg,Ingolstadt,1,1,D,1,1,D
+"""
+    else
+"""
 SP1,201617,19/08/2016,La Coruna,Eibar,2,1,H,0,0,D
 SP1,201617,19/08/2016,Malaga,Osasuna,1,1,D,0,0,D
 SP1,201617,20/08/2016,Barcelona,Betis,6,2,H,3,1,H
@@ -2371,6 +2385,7 @@ D1,201617,20/05/2017,Hertha,Leverkusen,2,6,A,0,3,A
 D1,201617,20/05/2017,Hoffenheim,Augsburg,0,0,D,0,0,D
 D1,201617,20/05/2017,Ingolstadt,Schalke 04,1,1,D,1,1,D
 D1,201617,20/05/2017,M'gladbach,Darmstadt,2,2,D,0,0,D
-"""  
+"""
+  end
   end
 end

@@ -14,7 +14,7 @@ defmodule DerivcoFootball.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :httpoison],
       mod: {DerivcoFootball, []}
     ]
   end
@@ -25,7 +25,7 @@ defmodule DerivcoFootball.MixProject do
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},
       {:exprotobuf, "~> 1.2"},
-      {:mock, "~> 0.3"}
+      {:httpoison, "~> 1.5"}
     ]
   end
 end
