@@ -7,7 +7,7 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
   response endoding.
 
   The handlers call into another GenServer:
-  DerivcoFootball.LeagueDataServer
+  `DerivcoFootball.LeagueDataServer`
 
   This server returns the data in tuple form that is then processed
   here into either JSON or Protocol Buffers.
@@ -50,52 +50,18 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
   # external api
   #
 
-  @doc"""
-  Retrieve all of the unique combinations of league (aka 'div')
-  and season. Together these form a "primary key" for the results.
-  As such, this endpoint should be called at least once so the
-  results APIs can be called. Those APIs require a vaild league
-  season pair as a parameter.
-
-  This particular endpoint returns the league/season pairs in
-  JSON.
-  """
   get "/api/json/league_season_pairs" do
     handle_get_json_league_season_pairs(conn)
   end
 
-  @doc"""
-  Retrieve all the game results for a league (aka 'div') and
-  season.
-
-  This particular endpoint returns game results in
-  JSON.
-  """
   get "/api/json/league_season_results/:league_season_pair" do
     handle_json_get_league_season_results(conn, league_season_pair)
   end
 
-  @doc"""
-  Retrieve all of the unique combinations of league (aka 'div')
-  and season. Together these form a "primary key" for the results.
-  As such, this endpoint should be called at least once so the
-  results APIs can be called. Those APIs require a vaild league
-  season pair as a parameter.
-
-  This particular endpoint returns the league/season pairs in
-  a Protocal Buffer.
-  """
   get "/api/protobuf/league_season_pairs" do
     handle_protobuf_get_league_season_pairs(conn)
   end
 
-  @doc"""
-  Retrieve all the game results for a league (aka 'div') and
-  season.
-
-  This particular endpoint returns game results in
-  a Protocol Buffer.
-  """
   get "/api/protobuf/league_season_results/:league_season_pair" do
     handle_protobuf_get_league_season_results(conn, league_season_pair)
   end
