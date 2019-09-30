@@ -98,14 +98,14 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
             send_resp(conn, 200, league_season_json_pairs)
 
           {_, _} ->
-            send_resp(conn, 500, "Sever error.")
+            send_resp(conn, 500, "Server error.")
         end
 
       {:error, :bad_league_season_pair} ->
         send_resp(conn, 400, "Bad league/season pair.")
 
       {_, _} ->
-        send_resp(conn, 500, "Sever error.")
+        send_resp(conn, 500, "Server error.")
     end
   end
 
@@ -134,14 +134,14 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
             send_resp(conn, 200, league_season_json_results)
 
           {_, _} ->
-            send_resp(conn, 500, "Sever error.")
+            send_resp(conn, 500, "Server error.")
         end
 
       {:error, :bad_league_season_pair} ->
         send_resp(conn, 400, "Bad league/season pair.")
 
       {_, _} ->
-        send_resp(conn, 500, "Sever error.")
+        send_resp(conn, 500, "Server error.")
     end
   end
 
@@ -166,7 +166,7 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
         |> (&send_resp(conn, 200, &1)).()
 
       {_, _} ->
-        send_resp(conn, 500, "Sever error.")
+        send_resp(conn, 500, "Server error.")
     end
   end
 
@@ -192,7 +192,7 @@ defmodule DerivcoFootball.LeagueDataEndpoint do
         send_resp(conn, 400, "Bad league/season pair.")
 
       {:error, _description} ->
-        send_resp(conn, 500, "Sever error.")
+        send_resp(conn, 500, "Server error.")
     end
   end
 
