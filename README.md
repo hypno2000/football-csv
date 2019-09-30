@@ -19,7 +19,7 @@
 
 ## API
 
-    **/api/json/league_season_pairs**
+   **/api/json/league_season_pairs**
 
     Retrieve all of the unique combinations of league (aka 'div')
     and season. Together these form a "primary key" for the results.
@@ -30,7 +30,7 @@
     This particular endpoint returns the league/season pairs in
     JSON.
   
-    **/api/json/league_season_results/:league_season_pair**
+   **/api/json/league_season_results/:league_season_pair**
 
     Retrieve all the game results for a league (aka 'div') and
     season.
@@ -38,7 +38,7 @@
     This particular endpoint returns game results in
     JSON.
 
-    **/api/protobuf/league_season_pairs**
+   **/api/protobuf/league_season_pairs**
 
     Retrieve all of the unique combinations of league (aka 'div')
     and season. Together these form a "primary key" for the results.
@@ -49,7 +49,7 @@
     This particular endpoint returns the league/season pairs in
     a Protocal Buffer.
   
-    **/api/protobuf/league_season_results/:league_season_pair**
+   **/api/protobuf/league_season_results/:league_season_pair**
 
     Retrieve all the game results for a league (aka 'div') and
     season.
