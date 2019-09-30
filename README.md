@@ -104,7 +104,7 @@
     need for something heavier like a full Phoenix app. Plug
     is used for routing and sending responses.
 
-## Something You'll Want to Know
+## Some things You'll Want to Know
 
     ExProtobuf is the library that's used for Protocol Buffer
     encoding. While it seems to have good features, be stable,
@@ -113,4 +113,13 @@
     to get encoding to work. If you encounter a problem, I 
     suggest using a lot of `IO.inspects`, minimal test cases,
     and asking someone if you get stuck.
+    
+    The data has a could of quirks: a few of the team names
+    contain a trailing space. The processing code strips
+    trailing spaces, but it's good to keep in mind in case of
+    expansions.
+    
+    A couple teams change their division
+    in different seasons. If queries are added, this is good
+    to keep in mind.
     
