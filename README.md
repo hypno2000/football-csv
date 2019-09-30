@@ -1,21 +1,52 @@
 # DerivcoFootball
 
-**TODO: Add description**
+## Description
+
+## API
+
+  **/api/json/league_season_pairs**
+
+  Retrieve all of the unique combinations of league (aka 'div')
+  and season. Together these form a "primary key" for the results.
+  As such, this endpoint should be called at least once so the
+  results APIs can be called. Those APIs require a vaild league
+  season pair as a parameter.
+
+  This particular endpoint returns the league/season pairs in
+  JSON.
+  
+  **/api/json/league_season_results/:league_season_pair**
+
+  Retrieve all the game results for a league (aka 'div') and
+  season.
+
+  This particular endpoint returns game results in
+  JSON.
+
+  **/api/protobuf/league_season_pairs**
+
+  Retrieve all of the unique combinations of league (aka 'div')
+  and season. Together these form a "primary key" for the results.
+  As such, this endpoint should be called at least once so the
+  results APIs can be called. Those APIs require a vaild league
+  season pair as a parameter.
+
+  This particular endpoint returns the league/season pairs in
+  a Protocal Buffer.
+  
+  **/api/protobuf/league_season_results/:league_season_pair**  
+
+  Retrieve all the game results for a league (aka 'div') and
+  season.
+
+  This particular endpoint returns game results in
+  a Protocol Buffer.
+
+
+## Architecture
+
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `derivco_football` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:derivco_football, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/derivco_football](https://hexdocs.pm/derivco_football).
+## Things You'll Want to Know
 
