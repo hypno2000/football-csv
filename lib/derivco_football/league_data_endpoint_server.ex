@@ -1,4 +1,4 @@
-defmodule DerivcoFootball.LeagueDataEndpoint do
+defmodule DerivcoFootball.LeagueDataEndpointServer do
   @moduledoc """
   This module contains both the routing and handling for the
   HTTP API. As this is a small API and rather simple to implement,

@@ -10,7 +10,7 @@ defmodule DerivcoFootball.Application do
       LeagueDataServer,
       Plug.Cowboy.child_spec(
         scheme: :http,
-        plug: DerivcoFootball.LeagueDataEndpoint,
+        plug: DerivcoFootball.LeagueDataEndpointServer,
         options: [port: 4000]
       )
     ]

@@ -63,9 +63,10 @@ defmodule DerivcoFootball.LeagueDataServer do
   
   @doc """
   This returns the league/season pairs that are used as keys
-  for calls to `DerivcoFootball.LeagueDataEndpoint.get_league_season_results`. It's used by:
-  - `DerivcoFootball.LeagueDataEndpoint.handle_get_json_league_season_pairs`
-  - `DerivcoFootball.LeagueDataEndpoint.handle_protobuf_get_league_season_pairs`
+  for calls to `DerivcoFootball.LeagueDataEndpointServer.get_league_season_results`.
+  It's used by:
+  - `DerivcoFootball.LeagueDataEndpointServer.handle_get_json_league_season_pairs`
+  - `DerivcoFootball.LeagueDataEndpointServer.handle_protobuf_get_league_season_pairs`
   """
   def handle_call(:get_league_season_pairs, _from, state) do
     {:reply, {:ok, state}, state}
@@ -73,8 +74,8 @@ defmodule DerivcoFootball.LeagueDataServer do
 
   @doc """
   This returns the league/season pair results. It's used by:
-  - `DerivcoFootball.LeagueDataEndpoint.handle_json_get_league_season_results`
-  - `DerivcoFootball.LeagueDataEndpoint.handle_protobuf_get_league_season_results`
+  - `DerivcoFootball.LeagueDataEndpointServer.handle_json_get_league_season_results`
+  - `DerivcoFootball.LeagueDataEndpointServer.handle_protobuf_get_league_season_results`
   """
   def handle_call({:get_league_season_results, league_season_pair}, _from, state) do
     if MapSet.member?(state, league_season_pair) do
@@ -117,7 +118,7 @@ defmodule DerivcoFootball.LeagueDataServer do
 
   # We use a separate function to destructure the data with a pattern
   # match. We create the table name from the league (aka 'div') and
-  # the season since these make a "primary key" for the results. This
+  # the season since these make a "selector" for the results. This
   # function is a bit weird looking and uses a non-standard technique.
   # Read the large comments below for details.
   #
