@@ -10,9 +10,9 @@ defmodule DerivcoFootball.LeagueDataServer do
   These are called by the HTTP API handlers.
 
   The data processing is handled by recursively processing the
-  csv lines, provided by DerivcoFootball.LeagueData.csvData',
+  csv lines, provided by `DerivcoFootball.LeagueData.csvData`,
   via the 'process_lines' functions. There are some assumptions
-  made about the data; from the DerivcoFootballTest @moduledoc:
+  made about the data; from the `DerivcoFootballTest` @moduledoc:
 
   'As the data is coming in from external systems,
   we're going to make the assumption that the data
@@ -63,9 +63,9 @@ defmodule DerivcoFootball.LeagueDataServer do
   
   @doc """
   This returns the league/season pairs that are used as keys
-  for calls to 'get_league_season_results'. It's used by:
-  - 'handle_get_json_league_season_pairs'
-  - 'handle_protobuf_get_league_season_pairs'
+  for calls to `DerivcoFootball.LeagueDataEndpoint.get_league_season_results`. It's used by:
+  - `DerivcoFootball.LeagueDataEndpoint.handle_get_json_league_season_pairs`
+  - `DerivcoFootball.LeagueDataEndpoint.handle_protobuf_get_league_season_pairs`
   """
   def handle_call(:get_league_season_pairs, _from, state) do
     {:reply, {:ok, state}, state}
@@ -73,8 +73,8 @@ defmodule DerivcoFootball.LeagueDataServer do
 
   @doc """
   This returns the league/season pair results. It's used by:
-  - 'handle_json_get_league_season_results'
-  - 'handle_protobuf_get_league_season_results'
+  - `DerivcoFootball.LeagueDataEndpoint.handle_json_get_league_season_results`
+  - `DerivcoFootball.LeagueDataEndpoint.handle_protobuf_get_league_season_results`
   """
   def handle_call({:get_league_season_results, league_season_pair}, _from, state) do
     if MapSet.member?(state, league_season_pair) do
