@@ -114,7 +114,7 @@
     suggest using a lot of `IO.inspects`, minimal test cases,
     and asking someone if you get stuck.
     
-    The data has a could of quirks: a few of the team names
+    The data has a couple of quirks: a few of the team names
     contain a trailing space. The processing code strips
     trailing spaces, but it's good to keep in mind in case of
     expansions.
